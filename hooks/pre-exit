@@ -21,10 +21,9 @@ if [ -z "${MESSAGE}" ]; then
   exit 1
 fi
 
+STATUS="Passed"
 if [ "0" != "${BUILDKITE_COMMAND_EXIT_STATUS}" ]; then
   STATUS="Failed"
-else
-  STATUS="Passed"
 fi 
 
 PAYLOAD="$(cat <<EOF

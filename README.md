@@ -24,7 +24,7 @@ Show how your plugin is to be used
 steps:
   - label: "💭 Sending Teams Notification"
     plugins:
-      - teams-notificaiton#0.0.1:
+      - teams-notification#0.0.1:
           webhook_url: "<webhook_url>"
           message: "From Buildkite with Love"
 ```
@@ -37,7 +37,7 @@ If you want to change the plugin behaviour:
 steps:
   - label: "💭 Sending Teams Notification"
     plugins:
-      - teams-notificaiton#0.0.1:
+      - teams-notification#0.0.1:
           webhook_url: "<webhook_url>"
           message: "From Buildkite with Love" 
 ```
