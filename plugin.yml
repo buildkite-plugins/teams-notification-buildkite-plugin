@@ -1,14 +1,15 @@
-name: Buildkite Plugin
-description: Exceptional functionality
+name: Teams Notification
+description: A Buildkite plugin that allows sending incoming webhooks at the pre-exit job lifecycle event.
 author: https://github.com/buildkite-plugins
 requirements:
   - bash
+  - curl
 configuration:
   properties:
-    mandatory:
+    webhook_url:
       type: string
-    optional:
+    message:
       type: string
   required:
-    - mandatory
+    - webhook-url
   additionalProperties: false

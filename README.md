@@ -1,6 +1,6 @@
 # Template Buildkite Plugin [![Build status](https://badge.buildkite.com/d673030645c7f3e7e397affddd97cfe9f93a40547ed17b6dc5.svg)](https://buildkite.com/buildkite/plugins-template)
 
-A Buildkite plugin for something awesome
+A Buildkite plugin for sending incoming webhook notifications setup on specific MS Teams channels.
 
 ## Options
 
@@ -8,15 +8,13 @@ These are all the options available to configure this plugin's behaviour.
 
 ### Required
 
-#### `mandatory` (string)
+#### `webook_url` (string)
 
-A great description of what this is supposed to do.
+The incoming webhook URL configured for a specific channel.
 
-### Optional
+#### `message` (string)
 
-#### `optional` (string)
-
-Describe how the plugin behaviour changes if this option is not specified, allowed values and its default.
+The message to include in the payload sent to the Teams channel
 
 ## Examples
 
@@ -24,11 +22,11 @@ Show how your plugin is to be used
 
 ```yaml
 steps:
-  - label: "🔨 Running plugin"
-    command: "echo template plugin"
+  - label: "💭 Sending Teams Notification"
     plugins:
-      - template#v1.0.0:
-          mandatory: "value"
+      - teams-notificaiton#0.0.1:
+          webhook_url: "<webhook_url>"
+          message: "From Buildkite with Love"
 ```
 
 ## And with other options as well
@@ -37,12 +35,11 @@ If you want to change the plugin behaviour:
 
 ```yaml
 steps:
-  - label: "🔨 Running plugin"
-    command: "echo template plugin with options"
+  - label: "💭 Sending Teams Notification"
     plugins:
-      - template#v1.0.0:
-          mandatory: "value"
-          optional: "example"
+      - teams-notificaiton#0.0.1:
+          webhook_url: "<webhook_url>"
+          message: "From Buildkite with Love" 
 ```
 
 ## ⚒ Developing

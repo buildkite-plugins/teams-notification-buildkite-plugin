@@ -1,0 +1,69 @@
+#!/bin/bash
+
+set -euo pipefail
+
+DIR="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
+
+# shellcheck source=lib/plugin.bash
+. "$DIR/../lib/plugin.bash"
+
+WEBHOOK_URL=$(plugin_read_config WEBHOOK_URL "")
+
+MESSAGE=$(plugin_read_config MESSAGE "")
+
+if [ -z "${WEBHOOK_URL}" ]; then
+  echo 'Missing webhook_url property in the plugin definition'
+  exit 1
+fi
+
+if [ -z "${MESSAGE}" ]; then
+  echo 'Missing message properry in the plugin definition'
+  exit 1
+fi
+
+if [ "0" != "${BUILDKITE_COMMAND_EXIT_STATUS}" ]; then
+  STATUS="Failed"
+else
+  STATUS="Passed"
+fi 
+
+PAYLOAD="$(cat <<EOF
+{
+        "type": "message",
+        "attachments": [
+            {
+                "contentType": "application/vnd.microsoft.card.adaptive",
+                "contentUrl": null,
+                "content": {
+                    "\$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+                    "type": "AdaptiveCard",
+                    "version": "1.2",
+                    "body": [
+                        {
+                            "type": "TextBlock",
+                            "text": "${MESSAGE}"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "${STATUS} ${BUILDKITE_PIPELINE_SLUG} (${BUILDKITE_BRANCH}) #${BUILDKITE_BUILD_NUMBER}"
+                        }
+                    ],
+                    "actions": [
+                        { 
+                            "title": "View Build",
+                            "type": "Action.OpenUrl",
+                            "url": "${BUILDKITE_BUILD_URL}"
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+EOF
+)"
+
+echo "Sending notificatioon to MS Teams channel..."
+
+echo "${PAYLOAD}" | curl -vvv -X POST "${WEBHOOK_URL}" \
+    -H "Content-Type: application/json" \
+    -d @-
