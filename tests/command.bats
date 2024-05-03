@@ -7,13 +7,13 @@ setup() {
   # export CURL_STUB_DEBUG=/dev/tty
 
   # you can set variables common to all tests here
-  export BUILDKITE_PLUGIN_YOUR_PLUGIN_NAME_MANDATORY='Value'
+  export BUILDKITE_PLUGIN_TEAMS_NOTIFICATION_MANDATORY='Value'
 }
 
 @test "Missing mandatory option fails" {
-  unset BUILDKITE_PLUGIN_YOUR_PLUGIN_NAME_MANDATORY
+  unset BUILDKITE_PLUGIN_TEAM_NOTIFICATION_MANDATORY
 
-  run "$PWD"/hooks/command
+  run "$PWD"/hooks/pre-exit
 
   assert_failure
   assert_output --partial 'Missing mandatory option'
@@ -22,7 +22,7 @@ setup() {
 
 @test "Normal basic operations" {
 
-  run "$PWD"/hooks/command
+  run "$PWD"/hooks/pre-exit
 
   assert_success
   assert_output --partial 'Running plugin with options'
@@ -32,7 +32,7 @@ setup() {
 @test "Optional value changes bejaviour" {
   export BUILDKITE_PLUGIN_YOUR_PLUGIN_NAME_OPTIONAL='other value'
 
-  run "$PWD"/hooks/command
+  run "$PWD"/hooks/pre-exit
 
   assert_success
   assert_output --partial 'Running plugin with options'

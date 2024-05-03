@@ -11,5 +11,6 @@ configuration:
     message:
       type: string
   required:
-    - webhook-url
+    - webhook_url
+    - message
   additionalProperties: false
