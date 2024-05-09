@@ -63,6 +63,6 @@ EOF
 
 echo "Sending notificatioon to MS Teams channel..."
 
-echo "${PAYLOAD}" | curl -vvv -X POST "${WEBHOOK_URL}" \
+echo "${PAYLOAD}" | curl --silent -X POST "${WEBHOOK_URL}" \
     -H "Content-Type: application/json" \
     -d @-
