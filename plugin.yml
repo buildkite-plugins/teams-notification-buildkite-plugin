@@ -1,5 +1,5 @@
 name: Teams Notification
-description: A Buildkite plugin that allows sending incoming webhooks at the pre-exit job lifecycle event.
+description: A Buildkite plugin for sending incoming webhook notifications setup on specific MS Teams channels.
 author: https://github.com/buildkite-plugins
 requirements:
   - bash
