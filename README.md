@@ -1,4 +1,4 @@
-# Teams Notification Buildkite Plugin
+# Teams Notification Buildkite Plugin [![Build status](https://badge.buildkite.com/519c16632496b3610d4691c7c75db6e679911ef5f666ce8f6a.svg)](https://buildkite.com/buildkite/plugins-ms-teams-notification)
 
 A Buildkite plugin for sending incoming webhook notifications setup on specific MS Teams channels.
 
