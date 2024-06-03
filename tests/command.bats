@@ -9,6 +9,7 @@ setup() {
   # you can set variables common to all tests here
   export BUILDKITE_PLUGIN_TEAMS_NOTIFICATION_WEBHOOK_URL='Value'
   export BUILDKITE_PLUGIN_TEAMS_NOTIFICATION_MESSAGE='Value'
+  export BUILDKITE_COMMAND_EXIT_STATUS=0
 }
 
 @test "Missing mandatory option fails" {
