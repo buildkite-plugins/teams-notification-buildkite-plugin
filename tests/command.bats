@@ -12,6 +12,7 @@ setup() {
   export BUILDKITE_COMMAND_EXIT_STATUS=0
   export BUILDKITE_BUILD_STATUS='passed'
   export BUILDKITE_PIPELINE_SLUG='pipeline'
+  export WEBHOOK_URL='value'
   export BUILDKITE_BRANCH='master'
   export BUILDKITE_BUILD_NUMBER='123' 
   export BUILDKITE_BUILD_URL='https://buildkite.com/org/pipeline/builds/123'
