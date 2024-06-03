@@ -7,11 +7,13 @@ setup() {
   # export CURL_STUB_DEBUG=/dev/tty
 
   # you can set variables common to all tests here
-  export BUILDKITE_PLUGIN_TEAMS_NOTIFICATION_MANDATORY='Value'
+  export BUILDKITE_PLUGIN_TEAMS_NOTIFICATION_WEBHOOK_URL='Value'
+  export BUILDKITE_PLUGIN_TEAMS_NOTIFICATION_MESSAGE='Value'
 }
 
 @test "Missing mandatory option fails" {
-  unset BUILDKITE_PLUGIN_TEAM_NOTIFICATION_MANDATORY
+  unset BUILDKITE_PLUGIN_TEAMS_NOTIFICATION_WEBHOOK_URL
+  unset BUILDKITE_PLUGIN_TEAMS_NOTIFICATION_MESSAGE
 
   run "$PWD"/hooks/pre-exit
 
@@ -29,7 +31,7 @@ setup() {
   assert_output --partial '- mandatory: Value'
 }
 
-@test "Optional value changes bejaviour" {
+@test "Optional value changes behaviour" {
   export BUILDKITE_PLUGIN_YOUR_PLUGIN_NAME_OPTIONAL='other value'
 
   run "$PWD"/hooks/pre-exit
