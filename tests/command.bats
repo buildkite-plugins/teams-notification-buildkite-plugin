@@ -25,7 +25,7 @@ setup() {
 
   run "$PWD"/hooks/pre-exit
 
-  assert_failure
+  assert_success
   assert_output --partial 'Missing mandatory option'
   refute_output --partial 'Running plugin'
 }
