@@ -10,6 +10,12 @@ setup() {
   export BUILDKITE_PLUGIN_TEAMS_NOTIFICATION_WEBHOOK_URL='Value'
   export BUILDKITE_PLUGIN_TEAMS_NOTIFICATION_MESSAGE='Value'
   export BUILDKITE_COMMAND_EXIT_STATUS=0
+  export BUILDKITE_BUILD_STATUS='passed'
+  export BUILDKITE_PIPELINE_SLUG='pipeline'
+  export BUILDKITE_BRANCH='master'
+  export BUILDKITE_BUILD_NUMBER='123' 
+  export BUILDKITE_BUILD_URL='https://buildkite.com/org/pipeline/builds/123'
+
 }
 
 @test "Missing mandatory option fails" {
