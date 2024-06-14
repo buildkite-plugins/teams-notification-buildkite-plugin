@@ -50,6 +50,22 @@ You can use the [bk cli](https://github.com/buildkite/cli) to run the [pipeline]
 bk local run
 ```
 
+## 🧪 Testing
+
+### Unit tests
+
+The unit tests are written using BATS. You can test locally with:
+
+```bash
+make test
+```
+
+Or using Docker Compose:
+
+```bash
+docker-compose -f docker-compose.yml run --rm tests
+```
+
 ## 👩‍💻 Contributing
 
 Your policy on how to contribute to the plugin!

@@ -3,38 +3,87 @@
 setup() {
   load "${BATS_PLUGIN_PATH}/load.bash"
 
-  # Uncomment to enable stub debugging
-  # export CURL_STUB_DEBUG=/dev/tty
+  # Stub curl command
+  export PATH="$PWD/tests/stubs:$PATH"
 
   # you can set variables common to all tests here
-  export BUILDKITE_PLUGIN_TEAMS_NOTIFICATION_MANDATORY='Value'
+  export BUILDKITE_PLUGIN_TEAMS_NOTIFICATION_WEBHOOK_URL='https://example.com/webhook'
+  export BUILDKITE_PLUGIN_TEAMS_NOTIFICATION_MESSAGE='Test message'
+  export BUILDKITE_COMMAND_EXIT_STATUS=0
+  export BUILDKITE_PIPELINE_SLUG='example-pipeline'
+  export BUILDKITE_BRANCH='main'
+  export BUILDKITE_BUILD_NUMBER=1
+  export BUILDKITE_BUILD_URL='https://buildkite.com/example-pipeline/builds/1'
 }
 
 @test "Missing mandatory option fails" {
-  unset BUILDKITE_PLUGIN_TEAM_NOTIFICATION_MANDATORY
+  unset BUILDKITE_PLUGIN_TEAMS_NOTIFICATION_WEBHOOK_URL
 
   run "$PWD"/hooks/pre-exit
 
   assert_failure
-  assert_output --partial 'Missing mandatory option'
-  refute_output --partial 'Running plugin'
+  assert_output --partial 'Missing webhook_url property in the plugin definition'
+  refute_output --partial 'Sending notification to MS Teams channel...'
 }
 
 @test "Normal basic operations" {
-
   run "$PWD"/hooks/pre-exit
 
   assert_success
-  assert_output --partial 'Running plugin with options'
-  assert_output --partial '- mandatory: Value'
+  assert_output --partial 'Sending notification to MS Teams channel...'
+  assert_output --partial '"text": "Test message"'
+  assert_output --partial '"text": "Passed example-pipeline (main) #1"'
 }
 
-@test "Optional value changes bejaviour" {
-  export BUILDKITE_PLUGIN_YOUR_PLUGIN_NAME_OPTIONAL='other value'
+@test "Optional value changes behaviour" {
+  export BUILDKITE_PLUGIN_TEAMS_NOTIFICATION_MESSAGE='Another test message'
 
   run "$PWD"/hooks/pre-exit
 
   assert_success
-  assert_output --partial 'Running plugin with options'
-  assert_output --partial '- optional: other value'
+  assert_output --partial 'Sending notification to MS Teams channel...'
+  assert_output --partial '"text": "Another test message"'
+}
+
+@test "Failed build status" {
+  export BUILDKITE_COMMAND_EXIT_STATUS=1
+
+  run "$PWD"/hooks/pre-exit
+
+  assert_success
+  assert_output --partial 'Sending notification to MS Teams channel...'
+  assert_output --partial '"text": "Failed example-pipeline (main) #1"'
+}
+
+@test "Missing message fails" {
+  unset BUILDKITE_PLUGIN_TEAMS_NOTIFICATION_MESSAGE
+
+  run "$PWD"/hooks/pre-exit
+
+  assert_failure
+  assert_output --partial 'Missing message property in the plugin definition'
+  refute_output --partial 'Sending notification to MS Teams channel...'
+}
+
+@test "Special characters in the message" {
+  export BUILDKITE_PLUGIN_TEAMS_NOTIFICATION_MESSAGE='Test message with special characters: !@#$%^&*()'
+
+  run "$PWD"/hooks/pre-exit
+
+  assert_success
+  assert_output --partial 'Sending notification to MS Teams channel...'
+  assert_output --partial 'Test message with special characters: !@#$%^&*()'
+}
+
+@test "Multiple executions" {
+  run "$PWD"/hooks/pre-exit
+
+  assert_success
+  assert_output --partial 'Sending notification to MS Teams channel...'
+
+  export BUILDKITE_COMMAND_EXIT_STATUS=1
+  run "$PWD"/hooks/pre-exit
+
+  assert_success
+  assert_output --partial 'Sending notification to MS Teams channel...'
 }
