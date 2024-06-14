@@ -14,5 +14,5 @@ steps:
     plugins:
       - shellcheck#v1.3.0:
           files:
-            - hooks/
-            - lib/
+            - hooks/**
+            - lib/**
