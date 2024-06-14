@@ -17,7 +17,7 @@ if [ -z "${WEBHOOK_URL}" ]; then
 fi
 
 if [ -z "${MESSAGE}" ]; then
-  echo 'Missing message properry in the plugin definition'
+  echo 'Missing message property in the plugin definition'
   exit 1
 fi
 
@@ -61,7 +61,7 @@ PAYLOAD="$(cat <<EOF
 EOF
 )"
 
-echo "Sending notificatioon to MS Teams channel..."
+echo "Sending notification to MS Teams channel..."
 
 echo "${PAYLOAD}" | curl --silent -X POST "${WEBHOOK_URL}" \
     -H "Content-Type: application/json" \
