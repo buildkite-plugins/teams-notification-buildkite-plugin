@@ -87,3 +87,37 @@ setup() {
   assert_success
   assert_output --partial 'Sending notification to MS Teams channel...'
 }
+
+@test "Dry run mode validates without sending webhook" {
+  export BUILDKITE_PLUGIN_TEAMS_NOTIFICATION_DRY_RUN='true'
+
+  run "$PWD"/hooks/pre-exit
+
+  assert_success
+  assert_output --partial 'Dry run mode, validating payload without sending.'
+  assert_output --partial 'Validating adaptive card...'
+  assert_output --partial 'Validation passed'
+  refute_output --partial 'Sending notification to MS Teams channel...'
+}
+
+@test "Dry run mode shows payload content" {
+  export BUILDKITE_PLUGIN_TEAMS_NOTIFICATION_DRY_RUN='true'
+
+  run "$PWD"/hooks/pre-exit
+
+  assert_success
+  assert_output --partial 'Payload:'
+  assert_output --partial '"type": "message"'
+  assert_output --partial '"contentType": "application/vnd.microsoft.card.adaptive"'
+  assert_output --partial '"$schema": "http://adaptivecards.io/schemas/adaptive-card.json"'
+}
+
+@test "Dry run with false value sends webhook normally" {
+  export BUILDKITE_PLUGIN_TEAMS_NOTIFICATION_DRY_RUN='false'
+
+  run "$PWD"/hooks/pre-exit
+
+  assert_success
+  assert_output --partial 'Sending notification to MS Teams channel...'
+  refute_output --partial 'Dry run mode enabled'
+}

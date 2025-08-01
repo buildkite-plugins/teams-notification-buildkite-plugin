@@ -8,7 +8,7 @@ These are all the options available to configure this plugin's behaviour.
 
 ### Required
 
-#### `webook_url` (string)
+#### `webhook_url` (string)
 
 The incoming webhook URL configured for a specific channel.
 
@@ -16,9 +16,15 @@ The incoming webhook URL configured for a specific channel.
 
 The message to include in the payload sent to the Teams channel
 
+### Optional
+
+#### `dry_run` (boolean)
+
+When set to `true`, validates the adaptive card payload against the Teams schema without sending the webhook. Useful for testing and debugging. Default: `false`
+
 ## Examples
 
-Show how your plugin is to be used
+Sending a webhook:
 
 ```yaml
 steps:
@@ -29,17 +35,18 @@ steps:
           message: "From Buildkite with Love"
 ```
 
-## And with other options as well
+## Testing with dry run
 
-If you want to change the plugin behaviour:
+To validate your notification payload without sending it:
 
 ```yaml
 steps:
-  - label: "💭 Sending Teams Notification"
+  - label: "💭 Testing Teams Notification"
     plugins:
       - teams-notification#1.0.0:
           webhook_url: "<webhook_url>"
-          message: "From Buildkite with Love" 
+          message: "From Buildkite with Love"
+          dry_run: true
 ```
 
 ## ⚒ Developing
