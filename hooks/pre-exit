@@ -11,6 +11,8 @@ WEBHOOK_URL=$(plugin_read_config WEBHOOK_URL "")
 
 MESSAGE=$(plugin_read_config MESSAGE "")
 
+DRY_RUN=$(plugin_read_config DRY_RUN "false")
+
 if [ -z "${WEBHOOK_URL}" ]; then
   echo 'Missing webhook_url property in the plugin definition'
   exit 1
@@ -24,7 +26,7 @@ fi
 STATUS="Passed"
 if [ "0" != "${BUILDKITE_COMMAND_EXIT_STATUS}" ]; then
   STATUS="Failed"
-fi 
+fi
 
 PAYLOAD="$(cat <<EOF
 {
@@ -48,7 +50,7 @@ PAYLOAD="$(cat <<EOF
                         }
                     ],
                     "actions": [
-                        { 
+                        {
                             "title": "View Build",
                             "type": "Action.OpenUrl",
                             "url": "${BUILDKITE_BUILD_URL}"
@@ -61,8 +63,33 @@ PAYLOAD="$(cat <<EOF
 EOF
 )"
 
-echo "Sending notification to MS Teams channel..."
+if [ "$DRY_RUN" = "true" ]; then
+  echo "Dry run mode, validating payload without sending."
+  echo "Payload:"
+  echo "${PAYLOAD}"
 
-echo "${PAYLOAD}" | curl --silent -X POST "${WEBHOOK_URL}" \
-    -H "Content-Type: application/json" \
-    -d @-
+  echo "Validating adaptive card..."
+
+  if [[ ! "${PAYLOAD}" == *'"type": "AdaptiveCard"'* ]]; then
+    echo "Missing AdaptiveCard type"
+    exit 1
+  fi
+
+  if [[ ! "${PAYLOAD}" == *'"type": "message"'* ]]; then
+    echo "Missing message type"
+    exit 1
+  fi
+
+  if [[ ! "${PAYLOAD}" == *'"contentType": "application/vnd.microsoft.card.adaptive"'* ]]; then
+    echo "Missing adaptive card content type"
+    exit 1
+  fi
+
+  echo "Validation passed"
+else
+  echo "Sending notification to MS Teams channel..."
+
+  echo "${PAYLOAD}" | curl --silent -X POST "${WEBHOOK_URL}" \
+      -H "Content-Type: application/json" \
+      -d @-
+fi
