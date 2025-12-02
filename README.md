@@ -30,7 +30,7 @@ Sending a webhook:
 steps:
   - label: "💭 Sending Teams Notification"
     plugins:
-      - teams-notification#1.0.0:
+      - teams-notification#1.0.1:
           webhook_url: "<webhook_url>"
           message: "From Buildkite with Love"
 ```
@@ -43,7 +43,7 @@ To validate your notification payload without sending it:
 steps:
   - label: "💭 Testing Teams Notification"
     plugins:
-      - teams-notification#1.0.0:
+      - teams-notification#1.0.1:
           webhook_url: "<webhook_url>"
           message: "From Buildkite with Love"
           dry_run: true
