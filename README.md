@@ -1,6 +1,14 @@
 # Teams Notification Buildkite Plugin [![Build status](https://badge.buildkite.com/519c16632496b3610d4691c7c75db6e679911ef5f666ce8f6a.svg)](https://buildkite.com/buildkite/plugins-ms-teams-notification)
 
-A Buildkite plugin for sending incoming webhook notifications setup on specific MS Teams channels.
+A Buildkite plugin for sending job status notifications to Microsoft Teams channels using incoming webhooks.
+
+## Notification status
+
+The notification reports the status of the job running the plugin, not the overall build. It uses that job's `BUILDKITE_COMMAND_EXIT_STATUS`: `0` produces "Passed", and any other value produces "Failed".
+
+A standalone notification step with `command: exit 0` reports "Passed" even if earlier jobs failed. Adding `wait` with `continue_on_failure: true` lets the notification step run after earlier failures, but does not make its status reflect those failures.
+
+Attach the plugin to the command step whose job status you want to report. This plugin does not report the completed build's overall result.
 
 ## Options
 
