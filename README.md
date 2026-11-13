@@ -4,11 +4,7 @@ A Buildkite plugin for sending job status notifications to Microsoft Teams chann
 
 ## Notification status
 
-The notification reports the status of the job running the plugin, not the overall build. It uses that job's `BUILDKITE_COMMAND_EXIT_STATUS`: `0` produces "Passed", and any other value produces "Failed".
-
-A standalone notification step with `command: exit 0` reports "Passed" even if earlier jobs failed. Adding `wait` with `continue_on_failure: true` lets the notification step run after earlier failures, but does not make its status reflect those failures.
-
-Attach the plugin to the command step whose job status you want to report. This plugin does not report the completed build's overall result.
+The notification reports the status of the job running the plugin. It uses that job's `BUILDKITE_COMMAND_EXIT_STATUS`: `0` produces "Passed", and any other value produces "Failed".
 
 ## Options
 

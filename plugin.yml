@@ -1,5 +1,5 @@
 name: Teams Notification
-description: Sends the status of the job running the plugin, not the overall build, to Microsoft Teams channels using incoming webhooks.
+description: Sends Buildkite job status to Microsoft Teams channels using incoming webhooks.
 author: https://github.com/buildkite-plugins
 requirements:
   - bash
